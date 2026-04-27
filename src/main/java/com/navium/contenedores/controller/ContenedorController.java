@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
 @RestController
-@RequestMapping("/contenedores")
+@RequestMapping("/api/contenedores")
 @Tag(name="Gestión de Contenedores", description = "Endpoints para registrar, listar, actualizar y eliminar contenedores en el patio")
 public class ContenedorController {
 
