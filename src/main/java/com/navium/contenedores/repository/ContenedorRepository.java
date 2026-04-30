@@ -10,6 +10,6 @@ import com.navium.contenedores.model.Contenedor;
 @Repository
 public interface ContenedorRepository  extends JpaRepository<Contenedor, Long> {
 
-    // Metodo para el endpoint /patio
-    List<Contenedor> findByUbicacionAndenIsNotNull();
+    // Método para el endpoint /patio
+    List<Contenedor> findByEstadoGeneral(String estadoGeneral);
 }

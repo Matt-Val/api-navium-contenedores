@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data // Genera getters, setters y constructores
+@Data 
 @Entity
 @Table(name = "contenedores")
 @Schema(description = "Entidad que representa un contenedor en el sistema de gestión de contenedores.")
@@ -36,11 +36,8 @@ public class Contenedor {
     @Schema(description = "Estado del contenedor en relación con el TATC")
     private String estadoTATC = "RETENIDO"; // Por defecto
 
-    // Ubicación
-    @Column(name = "ubicacion_anden")
-    @Schema(description = "Ubicación del contenedor en el andén")
-    private String ubicacionAnden; // "A-12" - "EN ESPERA"
-
-
+    @Column(nullable = false)
+    @Schema(description = "Estado general del contenedor")
+    private String estadoGeneral = "REGISTRADO"; // "REGISTRADO" - "EN PATIO" - "DESPACHADO" - "DETENIDO"
 
 }

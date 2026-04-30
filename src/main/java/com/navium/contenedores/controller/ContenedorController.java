@@ -33,7 +33,7 @@ public class ContenedorController {
             return ResponseEntity.ok(service.registrarContenedor(contenedor));
         } catch (DataIntegrityViolationException e) {
             // Si PostgreSQL detecta que la sigla ya existe, explota aquí.
-            // Atrapamos la explosión y armamos una respuesta elegante con código 409.
+            // Atrapamos la explosión y armamos una respuesta con código 409.
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Conflicto de Datos");
             errorResponse.put("mensaje", "El contenedor con esa sigla ya se encuentra registrado.");
@@ -75,18 +75,13 @@ public class ContenedorController {
     public ResponseEntity<Contenedor> actualizarEstado(
             @PathVariable Long id,
             @RequestParam(required = false) String estadoBL,
-            @RequestParam(required = false) String estadoTATC) { 
-        return ResponseEntity.ok(service.actualizarEstadoLegal(id, estadoBL, estadoTATC));
-    }
-
-    // 6. PUT (Anden) - Actualizar la ubicación física
-    @PutMapping("/{id}/anden")
-    @Operation(summary = "Actualizar ubicación del contenedor", description = "Asigna o actualiza la ubicación física (anden) de un contenedor específico.")
-    public ResponseEntity<Contenedor> actualizarAnden(@PathVariable Long id, @RequestParam String ubicacion) { 
-        return ResponseEntity.ok(service.asignarAnden(id, ubicacion));
+            @RequestParam(required = false) String estadoTATC,
+            @RequestParam(required = false) String estadoGeneral
+        ) { 
+            return ResponseEntity.ok(service.actualizarEstadoLegal(id, estadoBL, estadoTATC, estadoGeneral));
     }
     
-    // 7. DELETE - Eliminar un contenedor por su ID
+    // 6. DELETE - Eliminar un contenedor por su ID
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar contenedor", description = "Elimina un contenedor del sistema por su ID.")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) { 

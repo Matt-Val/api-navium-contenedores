@@ -100,6 +100,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             } catch (Exception e) {
+                System.out.println("ERROR DE JWT: " + e.getMessage());
+                e.printStackTrace();
 
                 // Si el token es falso o expiró, limpia el contexto (bloquea el paso)
                 SecurityContextHolder.clearContext();
