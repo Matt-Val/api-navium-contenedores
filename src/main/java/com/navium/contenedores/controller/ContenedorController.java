@@ -12,6 +12,7 @@ import com.navium.contenedores.model.Contenedor;
 import com.navium.contenedores.service.ContenedorService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/contenedores")
 @Tag(name="Gestión de Contenedores", description = "Endpoints para registrar, listar, actualizar y eliminar contenedores en el patio")
+@SecurityRequirement(name = "bearerAuth")
 public class ContenedorController {
 
     @Autowired
