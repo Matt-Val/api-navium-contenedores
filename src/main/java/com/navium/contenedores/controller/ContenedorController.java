@@ -33,6 +33,11 @@ public class ContenedorController {
         try {
             // Intenta guardarlo en la base de datos
             return ResponseEntity.ok(service.registrarContenedor(contenedor));
+        } catch (IllegalArgumentException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Validacion de datos");
+            errorResponse.put("mensaje", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (DataIntegrityViolationException e) {
             // Si PostgreSQL detecta que la sigla ya existe, explota aquí.
             // Atrapamos la explosión y armamos una respuesta con código 409.
@@ -74,20 +79,34 @@ public class ContenedorController {
     // 5. PUT (Estado) - Actualizar estados legales
     @PutMapping("/{id}/estado")
     @Operation(summary = "Actualizar estado del contenedor", description = "Actualiza los estados legales de un contenedor específico.")
-    public ResponseEntity<Contenedor> actualizarEstado(
+    public ResponseEntity<?> actualizarEstado(
             @PathVariable Long id,
             @RequestParam(required = false) String estadoBL,
             @RequestParam(required = false) String estadoTATC,
             @RequestParam(required = false) String estadoGeneral
         ) { 
-            return ResponseEntity.ok(service.actualizarEstadoLegal(id, estadoBL, estadoTATC, estadoGeneral));
+            try {
+                return ResponseEntity.ok(service.actualizarEstadoLegal(id, estadoBL, estadoTATC, estadoGeneral));
+            } catch (IllegalArgumentException e) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Validacion de datos");
+                errorResponse.put("mensaje", e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
     }
     
     // 6. DELETE - Eliminar un contenedor por su ID
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar contenedor", description = "Elimina un contenedor del sistema por su ID.")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) { 
-        service.eliminarContenedor(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> eliminar(@PathVariable Long id) { 
+        try {
+            service.eliminarContenedor(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalStateException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Conflicto de Datos");
+            errorResponse.put("mensaje", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+        }
     }
 }
