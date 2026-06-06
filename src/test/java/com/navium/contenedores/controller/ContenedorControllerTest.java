@@ -111,15 +111,14 @@ class ContenedorControllerTest {
         contenedor.setId(1L);
         contenedor.setEstadoGeneral("EN PATIO");
 
-        given(service.actualizarEstadoLegal(1L, "RETENIDO", "LIBERADO", "EN PATIO"))
+        given(service.actualizarEstadoLegal(1L, "OK", "OK", "EN PATIO"))
             .willReturn(contenedor);
 
-        ResponseEntity<?> response = controller.actualizarEstado(1L, "RETENIDO", "LIBERADO", "EN PATIO");
+        ResponseEntity<?> response = controller.actualizarEstado(1L, "OK", "OK", "EN PATIO");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        Contenedor body = (Contenedor) response.getBody();
-        assertNotNull(body);
-        assertEquals("EN PATIO", body.getEstadoGeneral());
+        assertNotNull(response.getBody());
+        assertEquals("EN PATIO", ((Contenedor)response.getBody()).getEstadoGeneral());
     }
 
     @Test
