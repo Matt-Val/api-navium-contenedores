@@ -1,0 +1,43 @@
+name: Despliegue a EC2
+
+on:
+  push:
+    branches:
+      - deploy 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v3
+
+      - name: Desplegar en EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          envs: DB_URL,DB_USERNAME,DB_PASSWORD 
+          script: |
+            if [ ! -d "api-navium-contenedores" ]; then
+              git clone https://github.com/TU_USUARIO_AQUI/api-navium-contenedores.git
+            fi
+            
+            cd api-navium-contenedores
+            
+            git checkout deploy
+            git pull origin deploy
+            
+            echo "DB_URL=$DB_URL" > .env
+            echo "DB_USERNAME=$DB_USERNAME" >> .env
+            echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+            
+            sudo docker-compose down
+            sudo docker-compose build
+            sudo docker-compose up -d
