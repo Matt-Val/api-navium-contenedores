@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   api-contenedores:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME}/api-contenedores:latest
     container_name: navium-api-contenedores
     ports:
       - "8080:8080"
