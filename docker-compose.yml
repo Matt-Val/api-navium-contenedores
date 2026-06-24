@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  api-contenedores:
+    image: ${DOCKER_USERNAME}/api-contenedores:latest
+    container_name: navium-api-contenedores
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    restart: always
